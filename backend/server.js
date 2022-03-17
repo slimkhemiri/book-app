@@ -1,17 +1,27 @@
 const express = require("express");
 const app = express();
+app.use(express.json());
 const mongoose = require("mongoose");
+const User = require("./models/User");
 
-const dbConnect = require('./config/dbConnect')
+const dbConnect = require("./config/dbConnect");
 dbConnect();
 //routes
 //user routes
 app.get("/api/users", (req, res) => {
   res.send("fetch users");
 });
-app.post("/api/users/register", (req, res) => {
-  res.send("register route");
-});
+
+app.post("/api/users/register", async (req, res) => {
+    try { 
+    const { name, email, password } = req.body;
+  const user = User.create({ name: name, email: email, password: password }) 
+  console.log(user);
+  res.send(user);   
+    }
+    catch(err) {console.log(err)};
+  
+})
 app.post("/api/users/login", (req, res) => {
   res.send("login route");
 });
